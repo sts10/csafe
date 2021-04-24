@@ -64,7 +64,7 @@ I don't know! If you think you have a formula for calculating this on a per-list
 
 This tool takes a word list (as a text file) as an input. It then searches the given list for both compoundings and problematic overlaps (see above).
 
-Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". Finally, it prints out this new, shorter, compound-safe list to a new text file. In this way it makes word lists "compound-safe" (or at least more safe-- see "Known issue" and "Caveat" sections below).
+Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file. In this way it makes word lists "compound-safe" (or at least more safe-- see "Known issue" and "Caveat" sections below).
 
 ## How to use this tool to check a word list
 
@@ -76,14 +76,13 @@ Next, clone down this repo. To run the script, cd into the repo's directory and 
 cargo run --release <wordlist.txt>
 ```
 
-This will create a file named `wordlist.txt.compound-safe` that is the compound-safe list of your word list (obviously may be shorter). 
+This will create a file named `wordlist.txt.csafe` that is the compound-safe list of your word list (obviously may be shorter). 
 
-You can also specify a specific output file location:
+You can also explicitly specify a specific output file location:
 
 ```
 cargo run --release <wordlist-to-check.txt> <output.txt>
 ```
-
 
 ## Some initial findings
 
@@ -110,5 +109,4 @@ Also, currently this script runs really slowly on lists with a lot of overlaps (
 1. Given a word list that is not compound-safe, calculate the probability of a compounding (generating a non-safe pair in a passphrase)? 
 2. Given this probability, does it make sense, or is it useful, to calculate a revised bits-per-word measure of the list? (For the record I think this would be harmful, but I pose it here for inspiration.)
 3. If a word list has no prefix words, is it definitely compound-safe? Assuming yes.
-
 
