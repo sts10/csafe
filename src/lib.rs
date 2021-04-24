@@ -10,9 +10,6 @@ pub fn find_unsafe_words(list: &[String]) -> Vec<Vec<String>> {
         println!("Checking {} (word {} of {})", root_word, count, list.len());
         let root_word_length = root_word.len();
         for second_word in list {
-            if root_word == second_word {
-                continue;
-            }
             let mashed_word = root_word.to_owned().to_owned() + second_word;
             for i in 0..mashed_word.len() {
                 if i == root_word_length {
