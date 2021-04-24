@@ -1,0 +1,7 @@
+[package]
+name = "compound_word_checker"
+version = "0.2.0"
+authors = ["sts10 <sschlinkert@gmail.com>"]
+edition = "2018"
+
+[dependencies]
