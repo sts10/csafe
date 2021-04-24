@@ -30,7 +30,7 @@ I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFu
 
 ## Brief examples of compound safety violations
 
-**Example #1**: If a word list included "under", "dog", and "underdog" as three separate words, it would NOT be compound-safe, since "under" and "dog" can be combined to make the word "underdog". A user not using spaces between words might get a passphrase that included the character string "underdog" as two words, but a brute-force attack would guess it as one word. Therefore this word list would NOT be compound-safe. (I refer to this as a "compounding".)
+**Example #1**: If a word list included "under", "dog", and "underdog" as three separate words, it would NOT be compound-safe, since "under" and "dog" can be combined to make the word "underdog". A user not using spaces between words might get a passphrase that included the character string "underdog" as two words, but a brute-force attack would guess it as one word. Therefore this word list would NOT be compound-safe.
 
 **Example #2**: Let's say a word list included "paper", "paperboy", "boyhood", and "hood". A user not using punctuation between words might get the following two words next to each other in a passphrase: "paperboyhood", which would be able to be brute-force guessed as both `[paperboy][hood]` and `[paper][boyhood]`. Therefore this word list would NOT be compound-safe. 
 
@@ -44,19 +44,15 @@ Likewise if we got the 6-word phrase "divingpaperboyhoodemployeepastelgravity", 
 
 **It's important to note** that if the passphrase has any punctuation (for example, a period, comma, hyphen, space) between words, both of these issues go away completely. If our passphrase is "cruelty under dog daylight paper boyhood": (1) an attacker who tries "underdog" as the third word does not get a match, (2) and the attacker likewise does not get a match if "paperboy" is guessed in the fifth slot and "hood is guessed as the sixth.
 
-## Are passphrases generated from compound-safe lists "stronger" or "better" than those generated from non-compound-safe lists?
-
-Frankly, I don't know.
-
 ## Realistically, what are the odds of this occurring in a randomly generated passphrase?
 
 I don't know! If you think you have a formula for calculating this on a per-list basis, feel free to submit an issue or pull request!
 
 ## What this tool does
 
-This tool takes a word list (as a text file) as an input. It then searches the given list for both compoundings and problematic overlaps (see above).
+This tool takes a word list (as a text file) as an input. It then searches the given list for compund-unsafe words.
 
-Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file. In this way it makes word lists "compound-safe" (or at least more safe-- see "Known issue" and "Caveat" sections below).
+Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file. In this way it makes word lists "compound-safe" (or at least more safe -- see "Known issue" and "Caveat" sections below).
 
 ## How to use this tool to check a word list
 
@@ -76,11 +72,15 @@ You can also explicitly specify a specific output file location:
 cargo run --release <wordlist-to-check.txt> <output.txt>
 ```
 
+### Why's it so slow? 
+
+Yes, this is script is slow. Running the Agile word list (18k words) through it took my laptop about 26 hours. If you have speed improvements please submit an issue or pull request!
+
 ## Some initial findings
 
 At one time, 1Password used [this list of 18,328 words](https://github.com/agilebits/crackme/blob/master/doc/AgileWords.txt) to generate passphrases for users. The list is not compound safe, though this is NOT a security issue for 1Password, the UI of which prevents users from creating passphrases without punctuation between words.
 
-However, since it is a "real world" passphrase list and it's not compound-safe, it makes for a good test for csafe. Given [that list](https://github.com/sts10/csafe/blob/main/word_lists/agile_words.txt), csafe was able to make [a compound-safe version](https://github.com/sts10/csafe/blob/main/word_lists/agile_words.txt.csafe) by only removing 1,508 words, leaving 16,820 words on the list. Note that the safer but more drastic approach of [removing all prefix words leaves you with just 15,190 words](https://github.com/sts10/prefix-safety-checker/blob/master/word_lists/agile_words.txt.no-prefix).)
+However, since it is a "real world" passphrase list and it's not compound-safe, it makes for a good demonstration for csafe. Given [that list](https://github.com/sts10/csafe/blob/main/word_lists/agile_words.txt), csafe was able to make [a compound-safe version](https://github.com/sts10/csafe/blob/main/word_lists/agile_words.txt.csafe) by only removing 1,508 words, leaving 16,820 words on the list. Note that the safer but more drastic approach of [removing all prefix words leaves you with just 15,190 words](https://github.com/sts10/prefix-safety-checker/blob/master/word_lists/agile_words.txt.no-prefix).
 
 Again: 1Password's software, as far as I know, does NOT allow users to generate random passphrase without punctuation between words. Users _must_ choose to separate words with a period, hyphen, space, comma, or underscore. So these findings do NOT constitute a security issue with 1Password.
 
@@ -93,6 +93,7 @@ Also, currently this script runs pretty slowly! Using threads in Rust would help
 ## To do
 
 - [ ] Use multiple threads to speed up the process. 
+- [ ] Use structopt to make it a proper CLI
 - [ ] Make the command line text output during the process cleaner and more professional-looking.
 
 ## Lingering questions
