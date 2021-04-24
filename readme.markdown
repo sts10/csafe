@@ -90,6 +90,12 @@ This project only looks for "two-word compounding", where two words, mashed toge
 
 Also, currently this script runs pretty slowly! Using threads in Rust would help, but I'm sure there's a more efficient way to find unsafe words.
 
+## Running tests and benchmarks
+
+`cargo test` runs a few basic tests. 
+
+`cargo bench` uses Criterion to benchmark the main unsafe word search function, located in `src/lib.rs`. If you're trying to help speed this project up (which would be much appreciated!) this will hopefully be useful to you.
+
 ## To do
 
 - [ ] Use multiple threads to speed up the process. 
