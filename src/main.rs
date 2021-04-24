@@ -9,7 +9,7 @@ fn main() {
     let compound_safe_list_output = if args.len() == 3 {
         args[2].to_string()
     } else {
-        format!("{}.compound-safe", &word_list_to_check_filename)
+        format!("{}.csafe", &word_list_to_check_filename)
     };
 
     let inputted_list = make_vec_from_file(word_list_to_check_filename);
@@ -29,7 +29,7 @@ fn main() {
     let original_list_length = make_vec_from_file(word_list_to_check_filename).len();
     let clean_list_length = safe_list.len();
     println!(
-        "You're inputted word list had {} words ({} bits per word).",
+        "The word list you inputted had {} words ({} bits per word).",
         original_list_length,
         log_base(2, original_list_length as f64)
     );
