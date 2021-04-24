@@ -1,4 +1,4 @@
-use compound_word_checker::*;
+use csafe::*;
 use std::env;
 use std::fs::File;
 use std::io::Write;
