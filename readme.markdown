@@ -38,7 +38,7 @@ Another way to think about example 2: if, for every pair of words, you mash them
 
 ## Why is the compound-safety of a passphrase word list notable? 
 
-Let's say we're using the word list described above, which has "under", "dog" and "underdog" in it. A user might randomly get "under" and "dog" in a row, for example in the six-word passphrase "crueltyfrailunderdogcyclingapostle". The user might assume they had six words worth of entropy. But really, an attacker brute forcing their way through five-word passphrases would eventually crack the passphrase. We can call this event "a compounding".
+Let's say we're using the word list described above, which has "under", "dog" and "underdog" in it. A user might randomly get "under" and "dog" in a row, for example in the six-word passphrase "crueltyfrailunderdogcyclingapostle". The user might assume they had six words worth of entropy. But really, an attacker brute forcing their way through five-word passphrases would eventually crack the passphrase. 
 
 Likewise if we got the 6-word phrase "divingpaperboyhoodemployeepastelgravity", an attacker running through six-word combinations would have two chances of guessing "paperboyhood" rather than one.
 
@@ -98,7 +98,7 @@ Also, currently this script runs pretty slowly! Using threads in Rust would help
 
 ## Lingering questions
 
-1. Given a word list that is not compound-safe, calculate the probability of a compounding (generating a non-safe pair in a passphrase)? 
+1. Given a word list that is not compound-safe, how can we calculate the probability of generating a non-safe pair in a passphrase of a given length (say, 6 words)?
 2. Given this probability, does it make sense, or is it useful, to calculate a revised bits-per-word measure of the list? (For the record I think this would be harmful, but I pose it here for inspiration.)
 3. If a word list has no prefix words, is it definitely compound-safe? Assuming yes.
 
