@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
 
-pub fn find_unsafe_words(list: &[String]) -> Vec<Vec<String>> {
+pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Vec<String>> {
     let mut unsafe_words: Vec<Vec<String>> = vec![];
     let mut count = 0;
     for root_word in list {
@@ -48,8 +48,8 @@ pub fn find_unsafe_words(list: &[String]) -> Vec<Vec<String>> {
     unsafe_words
 }
 
-use std::collections::HashMap;
-pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> Vec<String> {
+use std::collections::{HashMap, HashSet};
+pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> HashSet<String> {
     // First make a hashmap of appearance counts of all unsafe words
     let flat_vec = unsafe_words
         .clone() // not great, but gets it to compile
@@ -65,7 +65,7 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> Vec<String
             .or_insert(1);
     }
 
-    let mut words_to_remove: Vec<String> = vec![];
+    let mut words_to_remove = HashSet::new();
     'outer: for removal_contenders in &unsafe_words {
         // First, check if any contenders are already in the words_to_remove
         for word in removal_contenders {
@@ -82,21 +82,14 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> Vec<String
                 word_to_remove = &word;
             }
         }
-        words_to_remove.push(word_to_remove.to_string());
+        words_to_remove.insert(word_to_remove.to_string());
     }
-    words_to_remove.sort();
-    words_to_remove.dedup();
     words_to_remove
 }
 
 // Not sure why I need this and can't just use contains
-fn is_on_list(target_word: &str, list: &[String]) -> bool {
-    for word in list {
-        if word == target_word {
-            return true;
-        }
-    }
-    false
+fn is_on_list(target_word: &str, list: &HashSet<String>) -> bool {
+    list.contains(target_word)
 }
 
 pub fn make_vec_from_file(filename: &str) -> Vec<String> {
@@ -110,19 +103,22 @@ pub fn make_vec_from_file(filename: &str) -> Vec<String> {
     word_list
 }
 
-pub fn make_clean_list(words_to_remove: Vec<String>, original_list: Vec<String>) -> Vec<String> {
-    let mut clean_words: Vec<String> = [].to_vec();
-    for original_word in original_list {
-        let mut bad_word = false;
-        for word_to_remove in &words_to_remove {
-            if word_to_remove == &original_word {
-                bad_word = true;
-            }
-        }
-        if !bad_word {
-            clean_words.push(original_word);
-        }
-    }
+pub fn make_set_from_file(filename: &str) -> HashSet<String> {
+    let f = File::open(filename).unwrap();
+    let file = BufReader::new(&f);
+    file.lines()
+        .collect::<Result<HashSet<_>, _>>()
+        .expect("unable to read word list")
+}
+
+pub fn make_clean_list(
+    words_to_remove: HashSet<String>,
+    original_list: HashSet<String>,
+) -> Vec<String> {
+    let mut clean_words = original_list
+        .difference(&words_to_remove)
+        .map(|s| s.to_owned())
+        .collect::<Vec<_>>();
     clean_words.sort();
     clean_words
 }
