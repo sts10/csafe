@@ -35,16 +35,16 @@ pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Contenders> {
                     // this mashed_word... Think it's safe to break
                     break;
                 }
-                let first_part = &mashed_word[0..i];
-                let second_part = &mashed_word[i..mashed_word.len()];
-                if (first_part.trim() != "" && list.contains(first_part))
-                    && (second_part.trim() != "" && list.contains(second_part))
+                let head = &mashed_word[0..i];
+                let tail = &mashed_word[i..mashed_word.len()];
+                if (head.trim() != "" && list.contains(head))
+                    && (tail.trim() != "" && list.contains(tail))
                 {
                     let contenders_for_removal = Contenders {
                         root_word: root_word.to_string(),
                         second_word: second_word.to_string(),
-                        head: first_part.to_string(),
-                        tail: second_part.to_string(),
+                        head: head.to_string(),
+                        tail: tail.to_string(),
                     };
                     println!("Adding contenders {:?}", contenders_for_removal);
                     unsafe_words.push(contenders_for_removal);
