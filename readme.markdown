@@ -72,10 +72,6 @@ You can also explicitly specify a specific output file location:
 cargo run --release <wordlist-to-check.txt> <output.txt>
 ```
 
-### Why's it so slow? 
-
-Yes, this is script is slow. Running the Agile word list (18k words) through it took my laptop about 26 hours. If you have speed improvements please submit an issue or pull request!
-
 ## Some initial findings
 
 At one time, 1Password used [this list of 18,328 words](https://github.com/agilebits/crackme/blob/master/doc/AgileWords.txt) to generate passphrases for users. The list is not compound safe, though this is NOT a security issue for 1Password, the UI of which prevents users from creating passphrases without punctuation between words.
@@ -88,7 +84,7 @@ Again: 1Password's software, as far as I know, does NOT allow users to generate 
 
 This project only looks for "two-word compounding", where two words, mashed together, can be read in more than one way. But is there a possibility of a three-word compounding -- where three words become two? This tool does NOT currently check for this, so I can't actually guarantee that the lists outputted by the tool are completely compound-safe. This another reason to more simply remove all prefix words, as [the EFF word list creator apparently did](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You can remove all prefix words from a list with another tool I wrote called [Tidy](https://github.com/sts10/tidy).
 
-Also, currently this script runs pretty slowly! Using threads in Rust would help, but I'm sure there's a more efficient way to find unsafe words.
+Also, while [@wezm](https://github.com/wezm) helped speed up the program by orders of magnitude by using HashSets, there are certainly further optimizations to be made!
 
 ## Running tests and benchmarks
 
