@@ -52,9 +52,16 @@ I don't know! If you think you have a formula for calculating this on a per-list
 
 This tool takes a word list (as a text file) as an input. It then searches the given list for compund-unsafe words.
 
-Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file. In this way it makes word lists "compound-safe" (or at least more safe -- see "Known issue" and "Caveat" sections below).
+Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file, called output. In this way it makes word lists "compound-safe" (or at least more safe -- see "Known issue" and "Caveat" sections below).
 
 ## How to use this tool to check a word list
+
+### Installation
+
+1. [Install Rust](https://www.rust-lang.org/tools/install) if you haven't already
+2. Run: `cargo install --git https://github.com/sts10/csafe --branch main`
+
+### Usage
 
 ```
 USAGE:
@@ -72,21 +79,7 @@ ARGS:
     <input word list>    Filepath of word list to make compound-safe
 ```
 
-First you'll need to [install Rust](https://www.rust-lang.org/en-US/install.html). Make sure running the command `cargo --version` returns something that starts with something like `cargo 1.51.0`. 
-
-Next, clone down this repo. To run the script, cd into the repo's directory and run:
-
-```bash
-cargo run --release -- <wordlist.txt>
-```
-
-This will create a file named `wordlist.txt.csafe` that is the compound-safe list of your word list (obviously may be shorter). 
-
-You can also explicitly specify a specific output file location with the `-o`/`--output` flag:
-
-```bash
-cargo run --release -- -o <output>.txt <wordlist-to-check>.txt
-```
+If you don't provide an output destination with the `-o` flag, csafe will create a file named `wordlist.txt.csafe` that is the compound-safe list of your word list (obviously may be shorter). 
 
 ## Some initial findings
 
@@ -100,7 +93,9 @@ Again: 1Password's software, as far as I know, does NOT allow users to generate 
 
 This project only looks for "two-word compounding", where two words, mashed together, can be read in more than one way. But is there a possibility of a three-word compounding -- where three words become two? This tool does NOT currently check for this, so I can't actually guarantee that the lists outputted by the tool are completely compound-safe. This another reason to more simply remove all prefix words, as [the EFF word list creator apparently did](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You can remove all prefix words from a list with another tool I wrote called [Tidy](https://github.com/sts10/tidy).
 
-Also, while [@wezm](https://github.com/wezm) helped speed up the program by orders of magnitude by using HashSets, there are certainly further optimizations to be made!
+## Thanks 
+
+Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program by orders of magnitude. 
 
 ## Running tests and benchmarks
 
