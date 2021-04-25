@@ -66,26 +66,26 @@ FLAGS:
     -v, --verbose    Give verbose output
 
 OPTIONS:
-    -o, --output <output-path>    Print new, compound-safe list to file
+    -o, --output <output-path>    Write new, compound-safe list to specified file
 
 ARGS:
-    <input word list>    Word list to make compound-safe
+    <input word list>    Filepath of word list to make compound-safe
 ```
 
-First you'll need to [install Rust](https://www.rust-lang.org/en-US/install.html). Make sure running the command `cargo --version` returns something that starts with something like `cargo 0.26.0`. 
+First you'll need to [install Rust](https://www.rust-lang.org/en-US/install.html). Make sure running the command `cargo --version` returns something that starts with something like `cargo 1.51.0`. 
 
 Next, clone down this repo. To run the script, cd into the repo's directory and run:
 
-```
-cargo run --release <wordlist.txt>
+```bash
+cargo run --release -- <wordlist.txt>
 ```
 
 This will create a file named `wordlist.txt.csafe` that is the compound-safe list of your word list (obviously may be shorter). 
 
-You can also explicitly specify a specific output file location:
+You can also explicitly specify a specific output file location with the `-o`/`--output` flag:
 
-```
-cargo run --release <wordlist-to-check.txt> <output.txt>
+```bash
+cargo run --release -- -o <output>.txt <wordlist-to-check>.txt
 ```
 
 ## Some initial findings
@@ -110,8 +110,8 @@ Also, while [@wezm](https://github.com/wezm) helped speed up the program by orde
 
 ## To do
 
+- [X] Use structopt to make it a proper CLI
 - [ ] Use multiple threads to speed up the process. 
-- [ ] Use structopt to make it a proper CLI
 - [ ] Make the command line text output during the process cleaner and more professional-looking.
 
 ## Lingering questions

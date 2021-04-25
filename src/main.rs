@@ -12,11 +12,11 @@ struct Opt {
     #[structopt(short = "v", long = "verbose")]
     verbose: bool,
 
-    /// Print new, compound-safe list to file
+    /// Write new, compound-safe list to specified file
     #[structopt(short = "o", long = "output")]
     output_path: Option<String>,
 
-    /// Word list to make compound-safe
+    /// Filepath of word list to make compound-safe
     #[structopt(name = "input word list", parse(from_os_str))]
     input_path: PathBuf,
 }
