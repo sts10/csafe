@@ -22,7 +22,7 @@ mod integration_tests {
         .iter()
         .map(|&s| s.to_owned())
         .collect();
-        let mut unsafe_words_contenders = find_unsafe_words(&word_list);
+        let mut unsafe_words_contenders = find_unsafe_words(&word_list, false);
         unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
         let contenders_should_find = vec![
             Contenders {
@@ -100,7 +100,7 @@ mod integration_tests {
             .map(|&s| s.to_owned())
             .collect::<FxHashSet<_>>();
         assert_eq!(
-            make_clean_list(words_to_remove, list),
+            make_clean_list(words_to_remove, &list),
             vec!["bill".to_string(), "ross".to_string()]
         );
     }

@@ -1,8 +1,8 @@
+use fxhash::FxHashSet;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
-
-use fxhash::FxHashSet;
+use std::path::PathBuf;
 
 #[derive(Default, Debug, PartialEq)]
 pub struct Contenders {
@@ -12,13 +12,15 @@ pub struct Contenders {
     pub tail: String,
 }
 
-pub fn find_unsafe_words(list: &FxHashSet<String>) -> Vec<Contenders> {
+pub fn find_unsafe_words(list: &FxHashSet<String>, verbose: bool) -> Vec<Contenders> {
     let mut unsafe_words: Vec<Contenders> = vec![];
     let mut count = 0;
     let mut mashed_word = String::new();
     for root_word in list {
         count += 1;
-        println!("Checking {} (word {} of {})", root_word, count, list.len());
+        if verbose {
+            println!("Checking {} (word {} of {})", root_word, count, list.len());
+        }
         let root_word_length = root_word.len();
         for second_word in list {
             mashed_word.clear();
@@ -29,7 +31,9 @@ pub fn find_unsafe_words(list: &FxHashSet<String>) -> Vec<Contenders> {
                     continue;
                 }
                 if i == 0 && list.contains(&mashed_word) {
-                    println!("Found a mashed whole word ");
+                    if verbose {
+                        println!("Found a mashed whole word on list: {}", mashed_word);
+                    }
                     unsafe_words.push(Contenders {
                         root_word: root_word.to_string(),
                         second_word: second_word.to_string(),
@@ -51,7 +55,9 @@ pub fn find_unsafe_words(list: &FxHashSet<String>) -> Vec<Contenders> {
                         head: head.to_string(),
                         tail: tail.to_string(),
                     };
-                    println!("Adding contenders {:?}", contenders_for_removal);
+                    if verbose {
+                        println!("Adding contenders {:?}", contenders_for_removal);
+                    }
                     unsafe_words.push(contenders_for_removal);
                     break;
                 }
@@ -61,7 +67,7 @@ pub fn find_unsafe_words(list: &FxHashSet<String>) -> Vec<Contenders> {
     unsafe_words
 }
 
-use std::collections::{HashMap};
+use std::collections::HashMap;
 pub fn find_fewest_words_to_remove(unsafe_words: Vec<Contenders>) -> FxHashSet<String> {
     // First make a hashmap of appearance counts of all unsafe words
     let mut flat_vec = vec![];
@@ -130,7 +136,7 @@ pub fn make_vec_from_file(filename: &str) -> Vec<String> {
     word_list
 }
 
-pub fn make_set_from_file(filename: &str) -> FxHashSet<String> {
+pub fn make_set_from_file(filename: &PathBuf) -> FxHashSet<String> {
     let f = File::open(filename).unwrap();
     let file = BufReader::new(&f);
     file.lines()
@@ -140,7 +146,7 @@ pub fn make_set_from_file(filename: &str) -> FxHashSet<String> {
 
 pub fn make_clean_list(
     words_to_remove: FxHashSet<String>,
-    original_list: FxHashSet<String>,
+    original_list: &FxHashSet<String>,
 ) -> Vec<String> {
     let mut clean_words = original_list
         .difference(&words_to_remove)

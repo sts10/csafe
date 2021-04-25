@@ -1,11 +1,12 @@
 [package]
 name = "csafe"
-version = "0.2.20"
+version = "0.2.30"
 authors = ["sts10 <sschlinkert@gmail.com>"]
 edition = "2018"
 
 [dependencies]
 fxhash = "0.2.1"
+structopt = "0.3"
 
 [dev-dependencies]
 criterion = "0.3"
