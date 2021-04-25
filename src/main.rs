@@ -13,7 +13,7 @@ fn main() {
     };
 
     let inputted_list = make_set_from_file(word_list_to_check_filename);
-    let unsafe_words: Vec<Vec<String>> = find_unsafe_words(&inputted_list);
+    let unsafe_words: Vec<Contenders> = find_unsafe_words(&inputted_list);
     // unsafe_words is vector of vectors of words, one of which needs to be removed.
     let words_to_remove = find_fewest_words_to_remove(unsafe_words);
     println!("Found fewest words to remove as {:?}", words_to_remove);

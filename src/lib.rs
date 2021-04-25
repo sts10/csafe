@@ -2,8 +2,16 @@ use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
 
-pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Vec<String>> {
-    let mut unsafe_words: Vec<Vec<String>> = vec![];
+#[derive(Default, Debug, PartialEq)]
+pub struct Contenders {
+    pub root_word: String,
+    pub second_word: String,
+    pub head: String,
+    pub tail: String,
+}
+
+pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Contenders> {
+    let mut unsafe_words: Vec<Contenders> = vec![];
     let mut count = 0;
     for root_word in list {
         count += 1;
@@ -17,11 +25,12 @@ pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Vec<String>> {
                 }
                 if i == 0 && list.contains(&mashed_word) {
                     println!("Found a mashed whole word ");
-                    unsafe_words.push(vec![
-                        root_word.to_string(),
-                        second_word.to_string(),
-                        mashed_word.to_string(),
-                    ]);
+                    unsafe_words.push(Contenders {
+                        root_word: root_word.to_string(),
+                        second_word: second_word.to_string(),
+                        head: mashed_word.to_string(),
+                        ..Default::default()
+                    });
                     // I don't know if I can break here or I need to keep checking
                     // this mashed_word... Think it's safe to break
                     break;
@@ -31,12 +40,12 @@ pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Vec<String>> {
                 if (first_part.trim() != "" && list.contains(first_part))
                     && (second_part.trim() != "" && list.contains(second_part))
                 {
-                    let contenders_for_removal = vec![
-                        root_word.to_string(),
-                        second_word.to_string(),
-                        first_part.to_string(),
-                        second_part.to_string(),
-                    ];
+                    let contenders_for_removal = Contenders {
+                        root_word: root_word.to_string(),
+                        second_word: second_word.to_string(),
+                        head: first_part.to_string(),
+                        tail: second_part.to_string(),
+                    };
                     println!("Adding contenders {:?}", contenders_for_removal);
                     unsafe_words.push(contenders_for_removal);
                     break;
@@ -48,13 +57,17 @@ pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Vec<String>> {
 }
 
 use std::collections::{HashMap, HashSet};
-pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> HashSet<String> {
+pub fn find_fewest_words_to_remove(unsafe_words: Vec<Contenders>) -> HashSet<String> {
     // First make a hashmap of appearance counts of all unsafe words
-    let flat_vec = unsafe_words
-        .clone() // not great, but gets it to compile
-        .into_iter()
-        .flatten()
-        .collect::<Vec<String>>();
+    let mut flat_vec = vec![];
+    for contenders in &unsafe_words {
+        flat_vec.push(contenders.root_word.to_string());
+        flat_vec.push(contenders.second_word.to_string());
+        flat_vec.push(contenders.head.to_string());
+        if contenders.tail != "" {
+            flat_vec.push(contenders.tail.to_string());
+        }
+    }
 
     let mut counts_hashmap: HashMap<String, usize> = HashMap::new();
     for word in &flat_vec {
@@ -66,22 +79,37 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> HashSet<St
 
     let mut words_to_remove = HashSet::new();
     'outer: for removal_contenders in &unsafe_words {
+        let removal_contenders_as_vec = if removal_contenders.tail == "" {
+            vec![
+                removal_contenders.root_word.to_string(),
+                removal_contenders.second_word.to_string(),
+                removal_contenders.head.to_string(),
+            ]
+        } else {
+            vec![
+                removal_contenders.root_word.to_string(),
+                removal_contenders.second_word.to_string(),
+                removal_contenders.head.to_string(),
+                removal_contenders.tail.to_string(),
+            ]
+        };
         // First, check if any contenders are already in the words_to_remove
-        for word in removal_contenders {
+        for word in &removal_contenders_as_vec {
             if words_to_remove.contains(word) {
                 continue 'outer;
             }
         }
         // if not, look for high-scoring word of the contenders for removal
         let mut current_highest_score = 0;
-        let mut word_to_remove = &removal_contenders[0];
-        for word in removal_contenders {
-            if counts_hashmap[word] > current_highest_score {
-                current_highest_score = counts_hashmap[word];
-                word_to_remove = &word;
+        let mut word_to_remove: String = removal_contenders_as_vec[0].to_string();
+        for word in removal_contenders_as_vec {
+            if counts_hashmap[&word] > current_highest_score {
+                current_highest_score = counts_hashmap[&word];
+                word_to_remove = word.to_string();
             }
         }
-        words_to_remove.insert(word_to_remove.to_string());
+        // words_to_remove.insert(word_to_remove.to_string());
+        words_to_remove.insert(word_to_remove);
     }
     words_to_remove
 }
