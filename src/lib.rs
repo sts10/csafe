@@ -28,9 +28,8 @@ pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Vec<String>> {
                 }
                 let first_part = &mashed_word[0..i];
                 let second_part = &mashed_word[i..mashed_word.len()];
-                // Honestly not sure about these &&s
-                if (first_part.trim() != "" && is_on_list(first_part, &list))
-                    && (second_part.trim() != "" && is_on_list(second_part, &list))
+                if (first_part.trim() != "" && list.contains(first_part))
+                    && (second_part.trim() != "" && list.contains(second_part))
                 {
                     let contenders_for_removal = vec![
                         root_word.to_string(),
@@ -85,10 +84,6 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> HashSet<St
         words_to_remove.insert(word_to_remove.to_string());
     }
     words_to_remove
-}
-
-fn is_on_list(target_word: &str, list: &HashSet<String>) -> bool {
-    list.contains(target_word)
 }
 
 pub fn make_vec_from_file(filename: &str) -> Vec<String> {
