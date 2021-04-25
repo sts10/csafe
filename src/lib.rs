@@ -87,7 +87,6 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Vec<String>>) -> HashSet<St
     words_to_remove
 }
 
-// Not sure why I need this and can't just use contains
 fn is_on_list(target_word: &str, list: &HashSet<String>) -> bool {
     list.contains(target_word)
 }
