@@ -23,12 +23,11 @@ struct Opt {
 
 fn main() {
     let opt = Opt::from_args();
-    // let args: Vec<String> = env::args().collect();
-    // let word_list_to_check_filename = &args[1];
     let output_dest = match opt.output_path {
         Some(file_path) => file_path,
-        None => format!("{:?}.csafe", &opt.input_path.to_owned().into_os_string()),
+        None => format!("{}.csafe", &opt.input_path.to_str().unwrap()),
     };
+    println!("output_dest is {}", output_dest);
 
     let inputted_list = make_set_from_file(&opt.input_path);
     let unsafe_words: Vec<Contenders> = find_unsafe_words(&inputted_list, opt.verbose);

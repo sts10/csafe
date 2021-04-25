@@ -56,6 +56,22 @@ Next, it attempts to find the smallest number of words that need to be removed i
 
 ## How to use this tool to check a word list
 
+```
+USAGE:
+    csafe [FLAGS] [OPTIONS] <input word list>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+    -v, --verbose    Give verbose output
+
+OPTIONS:
+    -o, --output <output-path>    Print new, compound-safe list to file
+
+ARGS:
+    <input word list>    Word list to make compound-safe
+```
+
 First you'll need to [install Rust](https://www.rust-lang.org/en-US/install.html). Make sure running the command `cargo --version` returns something that starts with something like `cargo 0.26.0`. 
 
 Next, clone down this repo. To run the script, cd into the repo's directory and run:
