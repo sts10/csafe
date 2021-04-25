@@ -1,6 +1,6 @@
 mod integration_tests {
     use ::csafe::*;
-    use std::collections::HashSet;
+    use fxhash::FxHashSet;
 
     #[test]
     fn can_find_unsafe_words() {
@@ -85,7 +85,7 @@ mod integration_tests {
             ["night", "sea"]
                 .iter()
                 .map(|&s| s.to_owned())
-                .collect::<HashSet<_>>()
+                .collect::<FxHashSet<_>>()
         );
     }
 
@@ -94,11 +94,11 @@ mod integration_tests {
         let list = ["bill", "harry", "ross"]
             .iter()
             .map(|&s| s.to_owned())
-            .collect::<HashSet<_>>();
+            .collect::<FxHashSet<_>>();
         let words_to_remove = ["harry"]
             .iter()
             .map(|&s| s.to_owned())
-            .collect::<HashSet<_>>();
+            .collect::<FxHashSet<_>>();
         assert_eq!(
             make_clean_list(words_to_remove, list),
             vec!["bill".to_string(), "ross".to_string()]

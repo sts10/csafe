@@ -2,6 +2,8 @@ use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
 
+use fxhash::FxHashSet;
+
 #[derive(Default, Debug, PartialEq)]
 pub struct Contenders {
     pub root_word: String,
@@ -10,7 +12,7 @@ pub struct Contenders {
     pub tail: String,
 }
 
-pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Contenders> {
+pub fn find_unsafe_words(list: &FxHashSet<String>) -> Vec<Contenders> {
     let mut unsafe_words: Vec<Contenders> = vec![];
     let mut count = 0;
     for root_word in list {
@@ -56,8 +58,8 @@ pub fn find_unsafe_words(list: &HashSet<String>) -> Vec<Contenders> {
     unsafe_words
 }
 
-use std::collections::{HashMap, HashSet};
-pub fn find_fewest_words_to_remove(unsafe_words: Vec<Contenders>) -> HashSet<String> {
+use std::collections::{HashMap};
+pub fn find_fewest_words_to_remove(unsafe_words: Vec<Contenders>) -> FxHashSet<String> {
     // First make a hashmap of appearance counts of all unsafe words
     let mut flat_vec = vec![];
     for contenders in &unsafe_words {
@@ -77,7 +79,7 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Contenders>) -> HashSet<Str
             .or_insert(1);
     }
 
-    let mut words_to_remove = HashSet::new();
+    let mut words_to_remove = FxHashSet::default();
     'outer: for removal_contenders in &unsafe_words {
         let removal_contenders_as_vec = if removal_contenders.tail == "" {
             vec![
@@ -125,17 +127,17 @@ pub fn make_vec_from_file(filename: &str) -> Vec<String> {
     word_list
 }
 
-pub fn make_set_from_file(filename: &str) -> HashSet<String> {
+pub fn make_set_from_file(filename: &str) -> FxHashSet<String> {
     let f = File::open(filename).unwrap();
     let file = BufReader::new(&f);
     file.lines()
-        .collect::<Result<HashSet<_>, _>>()
+        .collect::<Result<FxHashSet<_>, _>>()
         .expect("unable to read word list")
 }
 
 pub fn make_clean_list(
-    words_to_remove: HashSet<String>,
-    original_list: HashSet<String>,
+    words_to_remove: FxHashSet<String>,
+    original_list: FxHashSet<String>,
 ) -> Vec<String> {
     let mut clean_words = original_list
         .difference(&words_to_remove)
