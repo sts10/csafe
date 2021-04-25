@@ -15,12 +15,15 @@ pub struct Contenders {
 pub fn find_unsafe_words(list: &FxHashSet<String>) -> Vec<Contenders> {
     let mut unsafe_words: Vec<Contenders> = vec![];
     let mut count = 0;
+    let mut mashed_word = String::new();
     for root_word in list {
         count += 1;
         println!("Checking {} (word {} of {})", root_word, count, list.len());
         let root_word_length = root_word.len();
         for second_word in list {
-            let mashed_word = root_word.to_owned().to_owned() + second_word;
+            mashed_word.clear();
+            mashed_word.push_str(root_word);
+            mashed_word.push_str(second_word);
             for i in 0..mashed_word.len() {
                 if i == root_word_length {
                     continue;
