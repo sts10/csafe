@@ -81,7 +81,7 @@ ARGS:
 
 If you don't provide an output destination with the `-o` flag, csafe will create a file named `wordlist.txt.csafe` that is the compound-safe list of your word list (obviously may be shorter). 
 
-## Some initial findings
+## An example use-case
 
 At one time, 1Password used [this list of 18,328 words](https://github.com/agilebits/crackme/blob/master/doc/AgileWords.txt) to generate passphrases for users. The list is not compound safe, though this is NOT a security issue for 1Password, the UI of which prevents users from creating passphrases without punctuation between words.
 
