@@ -89,7 +89,7 @@ However, since it is a "real world" passphrase list and it's not compound-safe, 
 
 Again: 1Password's software, as far as I know, does NOT allow users to generate random passphrase without punctuation between words. Users _must_ choose to separate words with a period, hyphen, space, comma, or underscore. So these findings do NOT constitute a security issue with 1Password.
 
-## Caveats / Known issues
+## Caveats / known issues
 
 This project only looks for "two-word compounding", where two words, mashed together, can be read in more than one way. But is there a possibility of a three-word compounding -- where three words become two? This tool does NOT currently check for this, so I can't actually guarantee that the lists outputted by the tool are completely compound-safe. This another reason to more simply remove all prefix words, as [the EFF word list creator apparently did](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You can remove all prefix words from a list with another tool I wrote called [Tidy](https://github.com/sts10/tidy).
 
