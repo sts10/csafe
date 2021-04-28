@@ -2,7 +2,7 @@ use fxhash::FxHashSet;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
-use std::path::PathBuf;
+use std::path::Path;
 
 #[derive(Default, Debug, PartialEq)]
 pub struct Contenders {
@@ -44,11 +44,18 @@ pub fn find_unsafe_words(list: &FxHashSet<String>, verbose: bool) -> Vec<Contend
                     // this mashed_word... Think it's safe to break
                     break;
                 }
-                let head = &mashed_word[0..i];
-                let tail = &mashed_word[i..mashed_word.len()];
-                if (head.trim() != "" && list.contains(head))
-                    && (tail.trim() != "" && list.contains(tail))
-                {
+                // This check is to deal with strange characters like accented vowels
+                let head = match mashed_word.get(0..i) {
+                    Some(head) => head,
+                    None => continue,
+                };
+                let tail = match mashed_word.get(i..mashed_word.len()) {
+                    Some(tail) => tail,
+                    None => continue,
+                };
+                // if (!head.trim().is_empty() && list.contains(head))
+                //     && (!tail.trim().is_empty() && list.contains(tail))
+                if list.contains(head) && list.contains(tail) {
                     let contenders_for_removal = Contenders {
                         root_word: root_word.to_string(),
                         second_word: second_word.to_string(),
@@ -75,7 +82,7 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Contenders>) -> FxHashSet<S
         flat_vec.push(contenders.root_word.to_string());
         flat_vec.push(contenders.second_word.to_string());
         flat_vec.push(contenders.head.to_string());
-        if contenders.tail != "" {
+        if !contenders.tail.is_empty() {
             flat_vec.push(contenders.tail.to_string());
         }
     }
@@ -90,7 +97,7 @@ pub fn find_fewest_words_to_remove(unsafe_words: Vec<Contenders>) -> FxHashSet<S
 
     let mut words_to_remove = FxHashSet::default();
     'outer: for removal_contenders in &unsafe_words {
-        let removal_contenders_as_vec = if removal_contenders.tail == "" {
+        let removal_contenders_as_vec = if removal_contenders.tail.is_empty() {
             vec![
                 removal_contenders.root_word.to_string(),
                 removal_contenders.second_word.to_string(),
@@ -136,7 +143,7 @@ pub fn make_vec_from_file(filename: &str) -> Vec<String> {
     word_list
 }
 
-pub fn make_set_from_file(filename: &PathBuf) -> FxHashSet<String> {
+pub fn make_set_from_file(filename: &Path) -> FxHashSet<String> {
     let f = File::open(filename).unwrap();
     let file = BufReader::new(&f);
     file.lines()

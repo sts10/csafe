@@ -104,4 +104,31 @@ mod integration_tests {
             vec!["bill".to_string(), "ross".to_string()]
         );
     }
+
+    #[test]
+    fn can_find_unsafe_words_with_accents() {
+        let word_list = [
+            "cliché", "éspirit", "spirit", "clich", "passé", "dog", "meal",
+        ]
+        .iter()
+        .map(|&s| s.to_owned())
+        .collect();
+        let mut unsafe_words_contenders = find_unsafe_words(&word_list, false);
+        unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
+        let contenders_should_find = vec![
+            Contenders {
+                root_word: "clich".to_string(),
+                second_word: "éspirit".to_string(),
+                head: "cliché".to_string(),
+                tail: "spirit".to_string(),
+            },
+            Contenders {
+                root_word: "cliché".to_string(),
+                second_word: "spirit".to_string(),
+                head: "clich".to_string(),
+                tail: "éspirit".to_string(),
+            },
+        ];
+        assert_eq!(unsafe_words_contenders, contenders_should_find);
+    }
 }
