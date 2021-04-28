@@ -10,7 +10,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
     ));
 
     // group.sample_size(10);
-    group.bench_function("Using hashset", |b| {
+    group.bench_function("Using Fx Hash", |b| {
         b.iter(|| find_unsafe_words(&unsafe_word_list, false))
     });
 }
