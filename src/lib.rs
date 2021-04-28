@@ -46,8 +46,8 @@ pub fn find_unsafe_words(list: &FxHashSet<String>, verbose: bool) -> Vec<Contend
                 }
                 let head = &mashed_word[0..i];
                 let tail = &mashed_word[i..mashed_word.len()];
-                if (head.trim() != "" && list.contains(head))
-                    && (tail.trim() != "" && list.contains(tail))
+                if (head.trim() != "" && list.contains(&head))
+                    && (tail.trim() != "" && list.contains(&tail))
                 {
                     let contenders_for_removal = Contenders {
                         root_word: root_word.to_string(),
