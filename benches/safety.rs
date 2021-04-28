@@ -9,7 +9,7 @@ pub fn criterion_benchmark(c: &mut Criterion) {
         "./tests/test-files/agile_words_letter_a.txt",
     ));
 
-    group.sample_size(10);
+    // group.sample_size(10);
     group.bench_function("Using hashset", |b| {
         b.iter(|| find_unsafe_words(&unsafe_word_list, false))
     });
