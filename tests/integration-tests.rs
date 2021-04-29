@@ -108,7 +108,7 @@ mod integration_tests {
     #[test]
     fn can_find_unsafe_words_with_accents() {
         let word_list = [
-            "cliché", "éspirit", "spirit", "clich", "passé", "dog", "meal",
+            "cliché", "éspirit", "spirit", "pass", "passé", "dog", "meal", "equality", "quality",
         ]
         .iter()
         .map(|&s| s.to_owned())
@@ -117,15 +117,15 @@ mod integration_tests {
         unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
         let contenders_should_find = vec![
             Contenders {
-                root_word: "clich".to_string(),
+                root_word: "pass".to_string(),
                 second_word: "éspirit".to_string(),
-                head: "cliché".to_string(),
+                head: "passé".to_string(),
                 tail: "spirit".to_string(),
             },
             Contenders {
-                root_word: "cliché".to_string(),
+                root_word: "passé".to_string(),
                 second_word: "spirit".to_string(),
-                head: "clich".to_string(),
+                head: "pass".to_string(),
                 tail: "éspirit".to_string(),
             },
         ];
