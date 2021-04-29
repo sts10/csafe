@@ -2,15 +2,14 @@
 
 **Compound Passphrase List Safety Checker**
 
-This command line tool checks whether a given passphrase word list (such as a diceware word list) has any words that can be combined to make another word on the list. It's written in Rust, which I am new to. This is very much **a toy project**, so I'd heavily caution against trusting it for real results. 
-
-This is an updated version of [this project](https://github.com/sts10/compound-passphrase-list-safety-checker) if you want to check that out.
-
-<!-- I also have written [a blog post](https://sts10.github.io/2018/05/05/compound-passphrase-list-safety-checker.html) about this tool. --> 
+This command line tool checks whether a given word list (such as a diceware word list) has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications. 
 
 
-Initially I wanted to make sure that no two words in [the EFF's long diceware word list](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) could be combined to make another word on the list. The tool here is generalized to check any such word list.
-## Disclosures
+I also have written [a blog post](https://sts10.github.io/2021/04/24/revisiting-compund-safety.html) about this tool. 
+
+<!-- Initially I wanted to make sure that no two words in [the EFF's long diceware word list](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) could be combined to make another word on the list. The tool here is generalized to check any such word list. -->
+
+## Disclosures!
 
 I am not a professional developer, researcher, or statistician, and frankly I'm pretty fuzzy on some of this math. This code/theory/explanation could be very wrong (but hopefully not harmful?). If you think it could be wrong or harmful, please create an issue! 
 
@@ -20,11 +19,13 @@ Further disclosures: see "Caveat" section below.
 
 [Tidy](https://github.com/sts10/tidy) is a Rust command-line tool that cleans and combines word lists. Notably, it can also optionally remove ["prefix" words](https://en.wikipedia.org/wiki/Prefix_code). It's my understanding that a word list that does not have any prefix words is "compound-safe", as I define that term below. And while removing all prefix words may remove more words than strictly necessary to guarantee compound-safety, it's a simpler concept to understand and check for, and thus likely better for actually vetting a word list for use without word separators than this project.
 
+Also, CSafe is an updated version of [this project](https://github.com/sts10/compound-passphrase-list-safety-checker) if you want to check that out.
+
 ## What is "compound-safety"? 
 
-I made up the term.
+First of all, I made up the term. (Maybe there's a better, more established term out there...)
 
-Basically, a passphrase word list is "compound-safe" (that is, it's safe to join words without punctuation or spaces) if it does NOT contain any pairs of words that can be combined such that they can be guessed in two distinct ways within the same word-length space. This includes instances in which two words can be combined and form another word on the list.
+Basically, a passphrase word list is "compound-safe" if it does NOT contain any pairs of words that can be combined such that they can be guessed in two distinct ways within the same word-length space. This includes instances in which two words can be combined and form another word on the list.
 
 I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFuSw1E?t=8m36s). 
 
@@ -34,7 +35,7 @@ I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFu
 
 **Example #2**: Let's say a word list included "paper", "paperboy", "boyhood", and "hood". A user not using punctuation between words might get the following two words next to each other in a passphrase: "paperboyhood", which would be able to be brute-force guessed as both `[paperboy][hood]` and `[paper][boyhood]`. Therefore this word list would NOT be compound-safe. 
 
-Another way to think about example 2: if, for every pair of words, you mash them together, there must be only ONE way to split them apart and make two words on the list. This is how I approached the issue when writing the code for csafe.
+Another way to think about example 2: if, for every pair of words, you mash them together, there must be only ONE way to split them apart and make two words on the list. "paperboyhood" can be split in two ways. This is how I approached the issue when writing the code for this project.
 
 ## Why is the compound-safety of a passphrase word list notable? 
 
@@ -50,9 +51,11 @@ I don't know! If you think you have a formula for calculating this on a per-list
 
 ## What this tool does
 
-This tool takes a word list (as a text file) as an input. It then searches the given list for compund-unsafe words.
+This tool takes a word list (as a file) as an input. It assumes there's one word per line. It then searches the given list for compound-unsafe words.
 
-Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file, called output. In this way it makes word lists "compound-safe" (or at least more safe -- see "Known issue" and "Caveat" sections below).
+Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". In our example above, if we remove any one of the four words ("paper", "paperboy", "boyhood", and "hood") the list becomes safe from this particular compounding. The program tries to choose which word to remove based on maximizing how many other compounding each word would "solve".
+
+Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file, called output. In this way it makes word lists "compound-safe" (or at least more safe -- see "Known issue" and "Caveat" sections below).
 
 ## How to use this tool to check a word list
 
@@ -79,11 +82,11 @@ ARGS:
     <input word list>    Filepath of word list to make compound-safe
 ```
 
-If you don't provide an output destination with the `-o` flag, csafe will create a file named `wordlist.txt.csafe` that is the compound-safe list of your word list (obviously may be shorter). 
+If you don't provide an output destination with the `-o` flag, csafe will write the compound-safe list to a file next to your inputted list with the same filename plus a `.csafe` extension at the end.
 
 ## An example use-case
 
-At one time, 1Password used [this list of 18,328 words](https://github.com/agilebits/crackme/blob/master/doc/AgileWords.txt) to generate passphrases for users. The list is not compound safe, though this is NOT a security issue for 1Password, the UI of which prevents users from creating passphrases without punctuation between words.
+At one time, the password manager 1Password used [this list of 18,328 words](https://github.com/agilebits/crackme/blob/master/doc/AgileWords.txt) to generate passphrases for users. The list is not compound safe, though this is NOT a security issue for 1Password, since the app's UI prevents users from creating passphrases without punctuation between words.
 
 However, since it is a "real world" passphrase list and it's not compound-safe, it makes for a good demonstration for csafe. Given [that list](https://github.com/sts10/csafe/blob/main/word_lists/agile_words.txt), csafe was able to make [a compound-safe version](https://github.com/sts10/csafe/blob/main/word_lists/agile_words.txt.csafe) by only removing 1,540 words, leaving 16,789 words on the list. Note that the safer but more drastic approach of [removing all prefix words leaves you with just 15,190 words](https://github.com/sts10/prefix-safety-checker/blob/master/word_lists/agile_words.txt.no-prefix).
 
@@ -91,7 +94,9 @@ Again: 1Password's software, as far as I know, does NOT allow users to generate 
 
 ## Caveats / known issues
 
-This project only looks for "two-word compounding", where two words, mashed together, can be read in more than one way. But is there a possibility of a three-word compounding -- where three words become two? This tool does NOT currently check for this, so I can't actually guarantee that the lists outputted by the tool are completely compound-safe. This another reason to more simply remove all prefix words, as [the EFF word list creator apparently did](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You can remove all prefix words from a list with another tool I wrote called [Tidy](https://github.com/sts10/tidy).
+This project only looks for "two-word compounding", where two words, mashed together, can be read in more than one way. But it's conceivable to me that there a possibility of a three-word compounding -- where three words can be combined and the split two different ways. This tool does NOT currently check for this, so I can't actually guarantee that the lists outputted by the tool are completely compound-safe. 
+
+This another reason to more simply remove all prefix words, as [the EFF word list creator apparently did](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You can remove all prefix words from a list with another tool I wrote called [Tidy](https://github.com/sts10/tidy).
 
 ## Thanks 
 
@@ -101,7 +106,7 @@ Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program
 
 `cargo test` runs a few basic tests. 
 
-`cargo bench` uses Criterion to benchmark the main unsafe word search function, located in `src/lib.rs`. If you're trying to help speed this project up (which would be much appreciated!) this will hopefully be useful to you.
+`cargo bench` uses [the Criterion crate](https://crates.io/crates/criterion) to benchmark the main unsafe word search function, located in `src/lib.rs`. If you're trying to help speed this project up (which would be much appreciated!) this will hopefully be useful to you.
 
 ## To do
 
