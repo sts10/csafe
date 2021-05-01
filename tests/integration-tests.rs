@@ -22,7 +22,7 @@ mod integration_tests {
         .iter()
         .map(|&s| s.to_owned())
         .collect();
-        let mut unsafe_words_contenders = find_unsafe_words(&word_list, false);
+        let mut unsafe_words_contenders = find_unsafe_word_contenders(&word_list, false);
         unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
         let contenders_should_find = vec![
             Contenders {
@@ -113,7 +113,7 @@ mod integration_tests {
         .iter()
         .map(|&s| s.to_owned())
         .collect();
-        let mut unsafe_words_contenders = find_unsafe_words(&word_list, false);
+        let mut unsafe_words_contenders = find_unsafe_word_contenders(&word_list, false);
         unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
         let contenders_should_find = vec![
             Contenders {
