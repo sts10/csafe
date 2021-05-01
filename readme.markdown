@@ -66,7 +66,7 @@ Finally, it prints out this new, shorter, compound-safe (csafe) list to a new te
 
 ### Usage
 
-```
+```text
 USAGE:
     csafe [FLAGS] [OPTIONS] <input word list>
 
@@ -76,7 +76,8 @@ FLAGS:
     -v, --verbose    Give verbose output
 
 OPTIONS:
-    -o, --output <output-path>    Write new, compound-safe list to specified file
+    -c, --compound <compound-path>    Write discovered compound words to specified file
+    -o, --output <output-path>        Write new, compound-safe list to specified file
 
 ARGS:
     <input word list>    Filepath of word list to make compound-safe

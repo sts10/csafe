@@ -16,7 +16,7 @@ struct Opt {
     #[structopt(short = "o", long = "output")]
     output_path: Option<String>,
 
-    /// Write compund words to specified file
+    /// Write discovered compound words to specified file
     #[structopt(short = "c", long = "compound")]
     compound_path: Option<String>,
 
