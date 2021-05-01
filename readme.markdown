@@ -117,7 +117,7 @@ Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program
 
 ## Lingering questions
 
-### Probably of getting a non-safe pair
+### Probability of getting a non-safe pair
 
 Given a word list that is not compound-safe, how can we calculate the probability of generating a non-safe pair in a passphrase of a given length (say, 6 words)?
 
