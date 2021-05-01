@@ -123,9 +123,9 @@ Given a word list that is not compound-safe, how can we calculate the probabilit
 
 I can hazard a guess here: I put forward that it's the number of (unique) unsafe contenders divided by the square of the length of the original word list. Using CSafe's `-c` option, I found that the Agile list gives us 393,400 total contenders. I think exactly half of those are actually unique, so 196,700 unique contenders. 
 
-Now my contention is that **each unique contender also represents a possible unsafe two-word combination**. How many possible two-word combinations are there? I'm pretty that's just the square of the length of the original word list.
+Now my contention is that **each unique contender also represents a possible unsafe two-word combination**. How many possible two-word combinations are there? I'm pretty sure that's just the square of the length of the original word list.
 
-So `(196700/(18328*18328))` gives us a 0.058% chance of getting an unsafe word combination when we put two words next to each other (without punctuation!). If we assume the user is generating a 6-word passphrase that means there'd be about a 0.35% chance it has an unsafe compounding. I suppose this could be tested empirically... maybe another program for another day.
+Evaluating `196700/(18328*18328)` gives us a 0.058% chance of getting an unsafe word combination when we put two words next to each other (without punctuation!). If we assume the user is generating a 6-word passphrase that means there will be 5 two-word combinations, which means there's about a 0.30% chance that the passphrase has at least one unsafe compounding. Again, I'm just spit-balling here -- I'm not yet confident enough in this formula to write it into the program. I suppose this could be tested empirically... maybe another program for another day. Work on any of this, as an issue or pull request, is welcome.
 
 <!-- 2. Given this probability, does it make sense, or is it useful, to calculate a revised bits-per-word measure of the list? (For the record I think this would be harmful, but I pose it here for inspiration.) -->
 
