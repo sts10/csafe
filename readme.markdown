@@ -45,10 +45,6 @@ Likewise if we got the 6-word phrase "divingpaperboyhoodemployeepastelgravity", 
 
 **It's important to note** that if the passphrase has any punctuation (for example, a period, comma, hyphen, space) between words, both of these issues go away completely. If our passphrase is "cruelty under dog daylight paper boyhood": (1) an attacker who tries "underdog" as the third word does not get a match, (2) and the attacker likewise does not get a match if "paperboy" is guessed in the fifth slot and "hood is guessed as the sixth.
 
-## Realistically, what are the odds of this occurring in a randomly generated passphrase?
-
-I don't know! If you think you have a formula for calculating this on a per-list basis, feel free to submit an issue or pull request!
-
 ## What this tool does
 
 This tool takes a word list (as a file) as an input. It assumes there's one word per line. It then searches the given list for compound-unsafe words.
