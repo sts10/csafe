@@ -35,7 +35,7 @@ I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFu
 
 **Example #2**: Let's say a word list included "paper", "paperboy", "boyhood", and "hood". A user not using punctuation between words might get the following two words next to each other in a passphrase: "paperboyhood", which would be able to be brute-force guessed as both `[paperboy][hood]` and `[paper][boyhood]`. Therefore this word list would NOT be compound-safe. 
 
-Another way to think about example 2: if, for every pair of words, you mash them together, there must be only ONE way to split them apart and make two words on the list. "paperboyhood" can be split in two ways. This is how I approached the issue when writing the code for this project.
+Another way to think about example 2: if, for every pair of words, you mash them together, there must be only ONE way to split them apart and make two words on the list. "paperboyhood" can be split in two ways. It is an _ambiguous_ pairing. This is how I approached the issue when writing the code for this project.
 
 ## Why is the compound-safety of a passphrase word list notable? 
 
