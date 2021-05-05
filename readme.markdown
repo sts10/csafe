@@ -117,7 +117,7 @@ Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program
 
 Given a word list that is not compound-safe, how can we calculate the probability of generating a non-safe pair in a passphrase of a given length (say, 6 words)?
 
-I can hazard a guess here: I put forward that it's the number of unsafe ambiguities divided by the square of the length of the original word list. Using CSafe's `-c` option, I found that the Agile list gives us 393,400 ambiguities. Note that only half of these are unique, but I think for the math below that's OK -- we still use the total number of ambiguities.
+I can hazard a guess here: I put forward that it's the number of unsafe ambiguities divided by the square of the length of the original word list. Using CSafe's `-a` option, I found that the Agile list gives us 393,400 ambiguities. Note that only half of these are unique, but I think for the math below that's OK -- we still use the total number of ambiguities.
 
 Now my contention is that **each ambiguity also represents a possible unsafe two-word combination**. How many possible two-word combinations are there? I'm pretty sure that's just the square of the length of the original word list.
 
