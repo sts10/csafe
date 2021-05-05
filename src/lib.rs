@@ -5,15 +5,15 @@ use std::io::BufReader;
 use std::path::Path;
 
 #[derive(Default, Debug, PartialEq)]
-pub struct Contenders {
+pub struct Ambiguity {
     pub root_word: String,
     pub second_word: String,
     pub head: String,
     pub tail: String,
 }
 
-pub fn find_unsafe_word_contenders(list: &FxHashSet<String>, verbose: bool) -> Vec<Contenders> {
-    let mut unsafe_word_contenders: Vec<Contenders> = vec![];
+pub fn find_unsafe_ambiguities(list: &FxHashSet<String>, verbose: bool) -> Vec<Ambiguity> {
+    let mut unsafe_ambiguities: Vec<Ambiguity> = vec![];
     let mut count = 0;
     let mut mashed_word = String::new();
     for root_word in list {
@@ -34,7 +34,7 @@ pub fn find_unsafe_word_contenders(list: &FxHashSet<String>, verbose: bool) -> V
                     if verbose {
                         println!("Found a mashed whole word on list: {}", mashed_word);
                     }
-                    unsafe_word_contenders.push(Contenders {
+                    unsafe_ambiguities.push(Ambiguity {
                         root_word: root_word.to_string(),
                         second_word: second_word.to_string(),
                         head: mashed_word.to_string(),
@@ -54,34 +54,34 @@ pub fn find_unsafe_word_contenders(list: &FxHashSet<String>, verbose: bool) -> V
                     None => continue,
                 };
                 if list.contains(head) && list.contains(tail) {
-                    let contenders_for_removal = Contenders {
+                    let ambiguity_for_removal = Ambiguity {
                         root_word: root_word.to_string(),
                         second_word: second_word.to_string(),
                         head: head.to_string(),
                         tail: tail.to_string(),
                     };
                     if verbose {
-                        println!("Adding contenders {:?}", contenders_for_removal);
+                        println!("Adding ambiguity {:?}", ambiguity_for_removal);
                     }
-                    unsafe_word_contenders.push(contenders_for_removal);
+                    unsafe_ambiguities.push(ambiguity_for_removal);
                     break;
                 }
             }
         }
     }
-    unsafe_word_contenders
+    unsafe_ambiguities
 }
 
 use std::collections::HashMap;
-pub fn find_fewest_words_to_remove(unsafe_word_contenders: Vec<Contenders>) -> FxHashSet<String> {
+pub fn find_fewest_words_to_remove(unsafe_ambiguities: Vec<Ambiguity>) -> FxHashSet<String> {
     // First make a hashmap of appearance counts of all unsafe words
     let mut flat_vec = vec![];
-    for contenders in &unsafe_word_contenders {
-        flat_vec.push(contenders.root_word.to_string());
-        flat_vec.push(contenders.second_word.to_string());
-        flat_vec.push(contenders.head.to_string());
-        if !contenders.tail.is_empty() {
-            flat_vec.push(contenders.tail.to_string());
+    for ambiguity in &unsafe_ambiguities {
+        flat_vec.push(ambiguity.root_word.to_string());
+        flat_vec.push(ambiguity.second_word.to_string());
+        flat_vec.push(ambiguity.head.to_string());
+        if !ambiguity.tail.is_empty() {
+            flat_vec.push(ambiguity.tail.to_string());
         }
     }
 
@@ -94,31 +94,31 @@ pub fn find_fewest_words_to_remove(unsafe_word_contenders: Vec<Contenders>) -> F
     }
 
     let mut words_to_remove = FxHashSet::default();
-    'outer: for removal_contenders in &unsafe_word_contenders {
-        let removal_contenders_as_vec = if removal_contenders.tail.is_empty() {
+    'outer: for ambiguity in &unsafe_ambiguities {
+        let ambiguity_as_vec = if ambiguity.tail.is_empty() {
             vec![
-                removal_contenders.root_word.to_string(),
-                removal_contenders.second_word.to_string(),
-                removal_contenders.head.to_string(),
+                ambiguity.root_word.to_string(),
+                ambiguity.second_word.to_string(),
+                ambiguity.head.to_string(),
             ]
         } else {
             vec![
-                removal_contenders.root_word.to_string(),
-                removal_contenders.second_word.to_string(),
-                removal_contenders.head.to_string(),
-                removal_contenders.tail.to_string(),
+                ambiguity.root_word.to_string(),
+                ambiguity.second_word.to_string(),
+                ambiguity.head.to_string(),
+                ambiguity.tail.to_string(),
             ]
         };
-        // First, check if any contenders are already in the words_to_remove
-        for word in &removal_contenders_as_vec {
+        // First, check if any ambiguities are already in the words_to_remove
+        for word in &ambiguity_as_vec {
             if words_to_remove.contains(word) {
                 continue 'outer;
             }
         }
-        // if not, look for high-scoring word of the contenders for removal
+        // if not, look for high-scoring word of ambiguity for removal
         let mut current_highest_score = 0;
-        let mut word_to_remove: String = removal_contenders_as_vec[0].to_string();
-        for word in removal_contenders_as_vec {
+        let mut word_to_remove: String = ambiguity_as_vec[0].to_string();
+        for word in ambiguity_as_vec {
             if counts_hashmap[&word] > current_highest_score {
                 current_highest_score = counts_hashmap[&word];
                 word_to_remove = word.to_string();

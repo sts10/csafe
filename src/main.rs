@@ -16,8 +16,8 @@ struct Opt {
     #[structopt(short = "o", long = "output")]
     output_path: Option<String>,
 
-    /// Write discovered compound words to specified file
-    #[structopt(short = "c", long = "compound")]
+    /// Write discovered ambiguities to specified file
+    #[structopt(short = "a", long = "ambiguities")]
     compound_path: Option<String>,
 
     /// Filepath of word list to make compound-safe
@@ -34,12 +34,11 @@ fn main() {
     println!("output_dest is {}", output_dest);
 
     let inputted_list = make_set_from_file(&opt.input_path);
-    let unsafe_words_contenders: Vec<Contenders> =
-        find_unsafe_word_contenders(&inputted_list, opt.verbose);
+    let unsafe_ambiguities: Vec<Ambiguity> = find_unsafe_ambiguities(&inputted_list, opt.verbose);
 
-    print_contenders_if_has_path(opt.compound_path, &unsafe_words_contenders);
+    print_ambiguities_if_has_path(opt.compound_path, &unsafe_ambiguities);
 
-    let words_to_remove = find_fewest_words_to_remove(unsafe_words_contenders);
+    let words_to_remove = find_fewest_words_to_remove(unsafe_ambiguities);
     println!("Found fewest words to remove as {:?}", words_to_remove);
 
     let safe_list = make_clean_list(words_to_remove, &inputted_list);
@@ -69,26 +68,23 @@ fn main() {
     }
 }
 
-fn print_contenders_if_has_path(
-    compound_path: Option<String>,
-    unsafe_words_contenders: &[Contenders],
-) {
+fn print_ambiguities_if_has_path(compound_path: Option<String>, unsafe_ambiguities: &[Ambiguity]) {
     if let Some(path) = compound_path {
         // unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
         let mut f = File::create(&path).expect("Unable to create file");
-        for contender in unsafe_words_contenders {
-            if contender.tail.is_empty() {
+        for ambiguity in unsafe_ambiguities {
+            if ambiguity.tail.is_empty() {
                 writeln!(
                     f,
                     "{}|{} can make {}",
-                    contender.root_word, contender.second_word, contender.head
+                    ambiguity.root_word, ambiguity.second_word, ambiguity.head
                 )
                 .expect("Unable to write data to file");
             } else {
                 writeln!(
                     f,
                     "{}|{} can make {}|{}",
-                    contender.root_word, contender.second_word, contender.head, contender.tail
+                    ambiguity.root_word, ambiguity.second_word, ambiguity.head, ambiguity.tail
                 )
                 .expect("Unable to write data to file");
             }

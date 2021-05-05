@@ -72,8 +72,8 @@ FLAGS:
     -v, --verbose    Give verbose output
 
 OPTIONS:
-    -c, --compound <compound-path>    Write discovered compound words to specified file
-    -o, --output <output-path>        Write new, compound-safe list to specified file
+    -a, --ambiguities <compound-path>    Write discovered ambiguities to specified file
+    -o, --output <output-path>           Write new, compound-safe list to specified file
 
 ARGS:
     <input word list>    Filepath of word list to make compound-safe
@@ -117,9 +117,9 @@ Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program
 
 Given a word list that is not compound-safe, how can we calculate the probability of generating a non-safe pair in a passphrase of a given length (say, 6 words)?
 
-I can hazard a guess here: I put forward that it's the number of unsafe contenders divided by the square of the length of the original word list. Using CSafe's `-c` option, I found that the Agile list gives us 393,400 contenders. Note that only half of these are unique, but I think for the math below that's OK -- we still use the total number of contenders.
+I can hazard a guess here: I put forward that it's the number of unsafe ambiguities divided by the square of the length of the original word list. Using CSafe's `-c` option, I found that the Agile list gives us 393,400 ambiguities. Note that only half of these are unique, but I think for the math below that's OK -- we still use the total number of ambiguities.
 
-Now my contention is that **each contender also represents a possible unsafe two-word combination**. How many possible two-word combinations are there? I'm pretty sure that's just the square of the length of the original word list.
+Now my contention is that **each ambiguity also represents a possible unsafe two-word combination**. How many possible two-word combinations are there? I'm pretty sure that's just the square of the length of the original word list.
 
 Evaluating `393400/(18328*18328)` gives us a 0.117% chance of getting an unsafe word combination when we put two words next to each other (without punctuation!). If we assume the user is generating a 6-word passphrase that means there will be 5 two-word combinations, which means there's about a 0.586% chance that the passphrase has at least one unsafe compounding. Again, I'm just spit-balling here -- I'm not yet confident enough in this formula to write it into the program. I suppose this could be tested empirically... maybe another program for another day. Work on any of this, as an issue or pull request, is welcome.
 
