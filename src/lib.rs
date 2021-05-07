@@ -41,8 +41,7 @@ pub fn find_unsafe_ambiguities(list: &FxHashSet<String>, verbose: bool) -> Vec<A
                         ..Default::default()
                     });
                     // I don't know if I can break here or I need to keep checking
-                    // this mashed_word... Think it's safe to break
-                    break;
+                    // this mashed_word for additional ambiguities...
                 }
                 // This check is to deal with strange characters like accented vowels
                 let head = match mashed_word.get(0..i) {
@@ -64,7 +63,6 @@ pub fn find_unsafe_ambiguities(list: &FxHashSet<String>, verbose: bool) -> Vec<A
                         println!("Adding ambiguity {:?}", ambiguity_for_removal);
                     }
                     unsafe_ambiguities.push(ambiguity_for_removal);
-                    break;
                 }
             }
         }
