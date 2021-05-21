@@ -39,13 +39,15 @@ fn main() {
     print_ambiguities_if_has_path(opt.ambiguities_path, &unsafe_ambiguities);
 
     let words_to_remove = find_fewest_words_to_remove(unsafe_ambiguities);
-    println!("Found fewest words to remove as {:?}", words_to_remove);
+    if opt.verbose {
+        println!("Found fewest words to remove as {:?}", words_to_remove);
+    }
 
     let safe_list = make_clean_list(words_to_remove, &inputted_list);
 
     let mut f = File::create(&output_dest).expect("Unable to create file");
-    for i in &safe_list {
-        writeln!(f, "{}", i).expect("Unable to write data to file");
+    for word in &safe_list {
+        writeln!(f, "{}", word).expect("Unable to write data to file");
     }
 
     println!("\n------------------------\n");
