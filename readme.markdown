@@ -72,8 +72,8 @@ FLAGS:
     -v, --verbose    Give verbose output
 
 OPTIONS:
-    -a, --ambiguities <compound-path>    Write discovered ambiguities to specified file
-    -o, --output <output-path>           Write new, compound-safe list to specified file
+    -a, --ambiguities <ambiguities-path>    Write discovered ambiguities to specified file
+    -o, --output <output-path>              Write new, compound-safe list to specified file
 
 ARGS:
     <input word list>    Filepath of word list to make compound-safe
@@ -95,15 +95,15 @@ This project only looks for "two-word compounding", where two words, mashed toge
 
 This another reason to more simply remove all prefix words, as [the EFF word list creator apparently did](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You can remove all prefix words from a list with another tool I wrote called [Tidy](https://github.com/sts10/tidy).
 
-## Thanks 
-
-Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program by orders of magnitude. 
-
 ## Running tests and benchmarks
 
 `cargo test` runs a few basic tests. 
 
 `cargo bench` uses [the Criterion crate](https://crates.io/crates/criterion) to benchmark the main unsafe word search function, located in `src/lib.rs`. If you're trying to help speed this project up (which would be much appreciated!) this will hopefully be useful to you.
+
+## Thanks 
+
+Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program by orders of magnitude. 
 
 ## To do
 

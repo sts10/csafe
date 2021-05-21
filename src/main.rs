@@ -18,7 +18,7 @@ struct Opt {
 
     /// Write discovered ambiguities to specified file
     #[structopt(short = "a", long = "ambiguities")]
-    compound_path: Option<String>,
+    ambiguities_path: Option<String>,
 
     /// Filepath of word list to make compound-safe
     #[structopt(name = "input word list", parse(from_os_str))]
@@ -36,7 +36,7 @@ fn main() {
     let inputted_list = make_set_from_file(&opt.input_path);
     let unsafe_ambiguities: Vec<Ambiguity> = find_unsafe_ambiguities(&inputted_list, opt.verbose);
 
-    print_ambiguities_if_has_path(opt.compound_path, &unsafe_ambiguities);
+    print_ambiguities_if_has_path(opt.ambiguities_path, &unsafe_ambiguities);
 
     let words_to_remove = find_fewest_words_to_remove(unsafe_ambiguities);
     println!("Found fewest words to remove as {:?}", words_to_remove);
@@ -68,8 +68,11 @@ fn main() {
     }
 }
 
-fn print_ambiguities_if_has_path(compound_path: Option<String>, unsafe_ambiguities: &[Ambiguity]) {
-    if let Some(path) = compound_path {
+fn print_ambiguities_if_has_path(
+    ambiguities_path: Option<String>,
+    unsafe_ambiguities: &[Ambiguity],
+) {
+    if let Some(path) = ambiguities_path {
         // unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
         let mut f = File::create(&path).expect("Unable to create file");
         for ambiguity in unsafe_ambiguities {
