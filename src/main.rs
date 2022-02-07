@@ -1,32 +1,32 @@
+use clap::Parser;
 use csafe::*;
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
-use structopt::StructOpt;
 
-/// CSafe
-#[derive(StructOpt, Debug)]
-#[structopt(name = "csafe")]
-struct Opt {
+/// Checks passphrase word lists for words that can be combined such that they can be guessed in two distinct ways
+#[derive(Parser, Debug)]
+#[clap(name = "csafe", version)]
+struct Args {
     /// Give verbose output
-    #[structopt(short = "v", long = "verbose")]
+    #[clap(short = 'v', long = "verbose")]
     verbose: bool,
 
     /// Write new, compound-safe list to specified file
-    #[structopt(short = "o", long = "output")]
+    #[clap(short = 'o', long = "output")]
     output_path: Option<String>,
 
     /// Write discovered ambiguities to specified file
-    #[structopt(short = "a", long = "ambiguities")]
+    #[clap(short = 'a', long = "ambiguities")]
     ambiguities_path: Option<String>,
 
     /// Filepath of word list to make compound-safe
-    #[structopt(name = "input word list", parse(from_os_str))]
+    #[clap(name = "input word list", parse(from_os_str))]
     input_path: PathBuf,
 }
 
 fn main() {
-    let opt = Opt::from_args();
+    let opt = Args::parse();
     let output_dest = match opt.output_path {
         Some(file_path) => file_path,
         None => format!("{}.csafe", &opt.input_path.to_str().unwrap()),

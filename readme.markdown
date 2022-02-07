@@ -4,8 +4,7 @@
 
 This command line tool checks whether a given word list (such as a diceware word list) has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications. 
 
-
-I also have written [a blog post](https://sts10.github.io/2021/04/24/revisiting-compund-safety.html) about this tool. 
+I also wrote [a blog post](https://sts10.github.io/2021/04/24/revisiting-compund-safety.html) about this tool. 
 
 <!-- Initially I wanted to make sure that no two words in [the EFF's long diceware word list](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) could be combined to make another word on the list. The tool here is generalized to check any such word list. -->
 
@@ -64,19 +63,17 @@ Finally, it prints out this new, shorter, compound-safe (csafe) list to a new te
 
 ```text
 USAGE:
-    csafe [FLAGS] [OPTIONS] <input word list>
-
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
-    -v, --verbose    Give verbose output
-
-OPTIONS:
-    -a, --ambiguities <ambiguities-path>    Write discovered ambiguities to specified file
-    -o, --output <output-path>              Write new, compound-safe list to specified file
+    csafe [OPTIONS] <input word list>
 
 ARGS:
     <input word list>    Filepath of word list to make compound-safe
+
+OPTIONS:
+    -a, --ambiguities <AMBIGUITIES_PATH>    Write discovered ambiguities to specified file
+    -h, --help                              Print help information
+    -o, --output <OUTPUT_PATH>              Write new, compound-safe list to specified file
+    -v, --verbose                           Give verbose output
+    -V, --version                           Print version information
 ```
 
 If you don't provide an output destination with the `-o` flag, csafe will write the compound-safe list to a file next to your inputted list with the same filename plus a `.csafe` extension at the end.
@@ -107,7 +104,6 @@ Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program
 
 ## To do
 
-- [X] Use structopt to make it a proper CLI
 - [ ] Use multiple threads to speed up the process. 
 - [ ] Make the command line text output during the process cleaner and more professional-looking.
 
@@ -126,4 +122,3 @@ Evaluating `393400/(18328*18328)` gives us a 0.117% chance of getting an unsafe 
 <!-- 2. Given this probability, does it make sense, or is it useful, to calculate a revised bits-per-word measure of the list? (For the record I think this would be harmful, but I pose it here for inspiration.) -->
 
 <!-- 3. If a word list has no prefix words, is it definitely compound-safe? Assuming yes. -->
-
