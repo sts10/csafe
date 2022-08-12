@@ -1,6 +1,6 @@
 # CSafe
 
-**WARNING: This code does not work. Do not use. See [Tidy](https://github.com/sts10/tidy) for alternatives.**
+**WARNING: This code does not successfully do what it claims to do. It does not make a list uniquely decodable. Do not use. See [Tidy](https://github.com/sts10/tidy) for alternatives.**
 
 **Compound Passphrase List Safety Checker**
 
