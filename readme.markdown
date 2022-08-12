@@ -1,5 +1,7 @@
 # CSafe
 
+**WARNING: This code does not work. Do not use. See [Tidy](https://github.com/sts10/tidy) for alternatives.**
+
 **Compound Passphrase List Safety Checker**
 
 This command line tool checks whether a given word list (such as a diceware word list) has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications. 
