@@ -81,7 +81,7 @@ fn print_ambiguities_if_has_path(
             if ambiguity.tail.is_empty() {
                 writeln!(
                     f,
-                    "{}|{} can make {}",
+                    "{}|{} can combine to make {}",
                     ambiguity.root_word, ambiguity.second_word, ambiguity.head
                 )
                 .expect("Unable to write data to file");
