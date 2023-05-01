@@ -1,8 +1,8 @@
 # CSafe: Compound Passphrase List Safety Checker
 
-**WARNING**: This program does **not** make a list _uniquely decodable_. If you're looking for a tool to make a word list uniquely decodable, see [Tidy](https://github.com/sts10/tidy).
+**WARNING**: This program does **not** make a list completely _uniquely decodable_. If you're looking for a tool to make a word list uniquely decodable, see [Tidy](https://github.com/sts10/tidy).
 
-This command line tool checks whether a given word list (such as a diceware word list) has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications. 
+This command line tool checks whether a given word list has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications. 
 
 I also wrote [a blog post](https://sts10.github.io/2021/04/24/revisiting-compund-safety.html) about this tool. 
 
@@ -62,18 +62,17 @@ Finally, it prints out this new, shorter, compound-safe (csafe) list to a new te
 ### Usage
 
 ```text
-USAGE:
-    csafe [OPTIONS] <input word list>
+Usage: csafe [OPTIONS] <input word list>
 
-ARGS:
-    <input word list>    Filepath of word list to make compound-safe
+Arguments:
+  <input word list>  Filepath of word list to make compound-safe
 
-OPTIONS:
-    -a, --ambiguities <AMBIGUITIES_PATH>    Write discovered ambiguities to specified file
-    -h, --help                              Print help information
-    -o, --output <OUTPUT_PATH>              Write new, compound-safe list to specified file
-    -v, --verbose                           Give verbose output
-    -V, --version                           Print version information
+Options:
+  -v, --verbose                         Give verbose output
+  -o, --output <OUTPUT_PATH>            Write new, compound-safe list to specified file
+  -a, --ambiguities <AMBIGUITIES_PATH>  Write discovered ambiguities to specified file
+  -h, --help                            Print help
+  -V, --version                         Print version
 ```
 
 If you don't provide an output destination with the `-o` flag, csafe will write the compound-safe list to a file next to your inputted list with the same filename plus a `.csafe` extension at the end.

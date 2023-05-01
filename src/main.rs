@@ -21,7 +21,7 @@ struct Args {
     ambiguities_path: Option<String>,
 
     /// Filepath of word list to make compound-safe
-    #[clap(name = "input word list", parse(from_os_str))]
+    #[clap(name = "input word list", required = true)]
     input_path: PathBuf,
 }
 
