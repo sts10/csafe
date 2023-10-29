@@ -16,7 +16,7 @@ Further disclosures: see "Caveat" section below.
 
 ## Related projects by me that may interest you
 
-[Tidy](https://github.com/sts10/tidy) is a Rust command-line tool that cleans and combines word lists. Notably, it can also optionally remove ["prefix" words](https://en.wikipedia.org/wiki/Prefix_code). It's my understanding that a word list that does not have any prefix words is "compound-safe", as I define that term below. And while removing all prefix words may remove more words than strictly necessary to guarantee compound-safety, it's a simpler concept to understand and check for, and thus likely better for actually vetting a word list for use without word separators than this project.
+[Tidy](https://github.com/sts10/tidy) is a Rust command-line tool that cleans and combines word lists. Notably, it can make a list uniquely decodable by a handful of different methods. Again, I would urge serious users to use Tidy rather than this program.
 
 Also, CSafe is an updated version of [this project](https://github.com/sts10/compound-passphrase-list-safety-checker) if you want to check that out.
 
