@@ -1,12 +1,13 @@
 # CSafe: Compound Passphrase List Safety Checker
 
-**WARNING**: This program does **not** make a list completely _uniquely decodable_. If you're looking for a tool to make a word list uniquely decodable, see [Tidy](https://github.com/sts10/tidy).
+⚠️
+**WARNING**: This program does **not** make a list completely _uniquely decodable_, which I've since learned is the proper term I was searching for what I came up with the idea of "compound safety". 
+
+If you're looking for a tool to (actually) make a word list uniquely decodable, **see [Tidy](https://github.com/sts10/tidy)**.
 
 This command line tool checks whether a given word list has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications. 
 
 I also wrote [a blog post](https://sts10.github.io/2021/04/24/revisiting-compund-safety.html) about this tool. 
-
-<!-- Initially I wanted to make sure that no two words in [the EFF's long diceware word list](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases) could be combined to make another word on the list. The tool here is generalized to check any such word list. -->
 
 ## Disclosures!
 
