@@ -22,11 +22,13 @@ Also, CSafe is an updated version of [this project](https://github.com/sts10/com
 
 ## What is "compound-safety"? 
 
-First of all, I made up the term. (Maybe there's a better, more established term out there...)
+Compound safety is a term I made up before I knew of the accurate term "unique decodability".
 
-Basically, a passphrase word list is "compound-safe" if it does NOT contain any pairs of words that can be combined such that they can be guessed in two distinct ways within the same word-length space. This includes instances in which two words can be combined and form another word on the list.
+But for completeness sake, I'll reproduce my the definition of the term as I made it up:
 
-I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFuSw1E?t=8m36s). 
+> Basically, a passphrase word list is "compound-safe" if it does NOT contain any pairs of words that can be combined such that they can be guessed in two distinct ways within the same word-length space. This includes instances in which two words can be combined and form another word on the list.
+
+> I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFuSw1E?t=8m36s). 
 
 ## Brief examples of compound safety violations
 
@@ -51,6 +53,8 @@ This tool takes a word list (as a file) as an input. It assumes there's one word
 Next, it attempts to find the smallest number of words that need to be removed in order to make the given word list "compound-safe". In our example above, if we remove any one of the four words ("paper", "paperboy", "boyhood", and "hood") the list becomes safe from this particular compounding. The program tries to choose which word to remove based on maximizing how many other compounding each word would "solve".
 
 Finally, it prints out this new, shorter, compound-safe (csafe) list to a new text file, called output. In this way it makes word lists "compound-safe" (or at least more safe -- see "Known issue" and "Caveat" sections below).
+
+Again, note that a "csafe" list is **not necessarily uniquely decodable**. **If you need to make your list uniquely decodable, use [Tidy](https://github.com/sts10/tidy)!**
 
 ## How to use this tool to check a word list
 
