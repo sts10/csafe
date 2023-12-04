@@ -1,17 +1,19 @@
 # CSafe: Compound Passphrase List Safety Checker
 
 ⚠️
-**WARNING**: This program does **not** make a list completely _uniquely decodable_, which I've since learned is the proper term I was searching for what I came up with the idea of "compound safety". 
+**WARNING**: This program does **not** make a list completely _uniquely decodable_, which I've since learned is the proper term I was searching for what I came up with the idea of "compound safety".
 
-If you're looking for a tool to (actually) make a word list uniquely decodable, **see [Tidy](https://github.com/sts10/tidy)**.
+If you're looking for a tool to (actually) make a word list uniquely decodable, **see [Tidy](https://github.com/sts10/tidy)**. If you just want to _check_ if a given word list is uniquely decodable, I'd recommend [my Word List Auditor tool](https://github.com/sts10/wla).
 
-This command line tool checks whether a given word list has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications. 
+## What this tool does
 
-I also wrote [a blog post](https://sts10.github.io/2021/04/24/revisiting-compund-safety.html) about this tool. 
+This command line tool checks whether a given word list has any words that can be combined to make another word on the list. This is very much **a toy project**, so I'd heavily caution against trusting it for real-world security applications.
+
+I also wrote [a blog post](https://sts10.github.io/2021/04/24/revisiting-compund-safety.html) about this tool.
 
 ## Disclosures!
 
-I am not a professional developer, researcher, or statistician, and frankly I'm pretty fuzzy on some of this math. This code/theory/explanation could be very wrong (but hopefully not harmful?). If you think it could be wrong or harmful, please create an issue! 
+I am not a professional developer, researcher, or statistician, and frankly I'm pretty fuzzy on some of this math. This code/theory/explanation could be very wrong (but hopefully not harmful?). If you think it could be wrong or harmful, please create an issue!
 
 Further disclosures: see "Caveat" section below.
 
@@ -21,7 +23,7 @@ Further disclosures: see "Caveat" section below.
 
 Also, CSafe is an updated version of [this project](https://github.com/sts10/compound-passphrase-list-safety-checker) if you want to check that out.
 
-## What is "compound-safety"? 
+## What is "compound-safety"?
 
 Compound safety is a term I made up before I knew of the accurate term "unique decodability".
 
@@ -29,19 +31,19 @@ But for completeness sake, I'll reproduce my the definition of the term as I mad
 
 > Basically, a passphrase word list is "compound-safe" if it does NOT contain any pairs of words that can be combined such that they can be guessed in two distinct ways within the same word-length space. This includes instances in which two words can be combined and form another word on the list.
 
-> I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFuSw1E?t=8m36s). 
+> I heard of this potential issue in [this YouTube video](https://youtu.be/Pe_3cFuSw1E?t=8m36s).
 
 ## Brief examples of compound safety violations
 
 **Example #1**: If a word list included "under", "dog", and "underdog" as three separate words, it would NOT be compound-safe, since "under" and "dog" can be combined to make the word "underdog". A user not using spaces between words might get a passphrase that included the character string "underdog" as two words, but a brute-force attack would guess it as one word. Therefore this word list would NOT be compound-safe.
 
-**Example #2**: Let's say a word list included "paper", "paperboy", "boyhood", and "hood". A user not using punctuation between words might get the following two words next to each other in a passphrase: "paperboyhood", which would be able to be brute-force guessed as both `[paperboy][hood]` and `[paper][boyhood]`. Therefore this word list would NOT be compound-safe. 
+**Example #2**: Let's say a word list included "paper", "paperboy", "boyhood", and "hood". A user not using punctuation between words might get the following two words next to each other in a passphrase: "paperboyhood", which would be able to be brute-force guessed as both `[paperboy][hood]` and `[paper][boyhood]`. Therefore this word list would NOT be compound-safe.
 
 Another way to think about example 2: if, for every pair of words, you mash them together, there must be only ONE way to split them apart and make two words on the list. "paperboyhood" can be split in two ways. It is an _ambiguous_ pairing. This is how I approached the issue when writing the code for this project.
 
-## Why is the compound-safety of a passphrase word list notable? 
+## Why is the compound-safety of a passphrase word list notable?
 
-Let's say we're using the word list described above, which has "under", "dog" and "underdog" in it. A user might randomly get "under" and "dog" in a row, for example in the six-word passphrase "crueltyfrailunderdogcyclingapostle". The user might assume they had six words worth of entropy. But really, an attacker brute forcing their way through five-word passphrases would eventually crack the passphrase. 
+Let's say we're using the word list described above, which has "under", "dog" and "underdog" in it. A user might randomly get "under" and "dog" in a row, for example in the six-word passphrase "crueltyfrailunderdogcyclingapostle". The user might assume they had six words worth of entropy. But really, an attacker brute forcing their way through five-word passphrases would eventually crack the passphrase.
 
 Likewise if we got the 6-word phrase "divingpaperboyhoodemployeepastelgravity", an attacker running through six-word combinations would have two chances of guessing "paperboyhood" rather than one.
 
@@ -92,23 +94,23 @@ Again: 1Password's software, as far as I know, does NOT allow users to generate 
 
 ## Caveats / known issues
 
-This project only looks for "two-word compounding", where two words, mashed together, can be read in more than one way. But it's conceivable to me that there a possibility of a three-word compounding -- where three words can be combined and the split two different ways. This tool does NOT currently check for this, so I can't actually guarantee that the lists outputted by the tool are completely compound-safe. 
+This project only looks for "two-word compounding", where two words, mashed together, can be read in more than one way. But it's conceivable to me that there a possibility of a three-word compounding -- where three words can be combined and the split two different ways. This tool does NOT currently check for this, so I can't actually guarantee that the lists outputted by the tool are completely compound-safe.
 
 This another reason to more simply remove all prefix words, as [the EFF word list creator apparently did](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases). You can remove all prefix words from a list with another tool I wrote called [Tidy](https://github.com/sts10/tidy).
 
 ## Running tests and benchmarks
 
-`cargo test` runs a few basic tests. 
+`cargo test` runs a few basic tests.
 
 `cargo bench` uses [the Criterion crate](https://crates.io/crates/criterion) to benchmark the main unsafe word search function, located in `src/lib.rs`. If you're trying to help speed this project up (which would be much appreciated!) this will hopefully be useful to you.
 
-## Thanks 
+## Thanks
 
-Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program by orders of magnitude. 
+Huge thanks to [@wezm](https://github.com/wezm) for help speeding up the program by orders of magnitude.
 
 ## To do
 
-- [ ] Use multiple threads to speed up the process. 
+- [ ] Use multiple threads to speed up the process.
 - [ ] Make the command line text output during the process cleaner and more professional-looking.
 
 ## Lingering questions
