@@ -51,14 +51,14 @@ fn main() {
     }
 
     println!("\n------------------------\n");
-    let original_list_length = &inputted_list.len();
+    let original_list_length = inputted_list.len();
     let clean_list_length = safe_list.len();
     println!(
         "The word list you inputted had {} words ({} bits per word).\n",
         original_list_length,
-        log_base(2, *original_list_length as f64)
+        log_base(2, original_list_length as f64)
     );
-    if clean_list_length == *original_list_length {
+    if clean_list_length == original_list_length {
         println!("I didn't find any problematic words. Your inputted word list appears to be compound-safe as is!");
     } else {
         println!(
@@ -75,8 +75,7 @@ fn print_ambiguities_if_has_path(
     unsafe_ambiguities: &[Ambiguity],
 ) {
     if let Some(path) = ambiguities_path {
-        // unsafe_words_contenders.sort_by(|a, b| a.root_word.cmp(&b.root_word));
-        let mut f = File::create(&path).expect("Unable to create file");
+        let mut f = File::create(path).expect("Unable to create file");
         for ambiguity in unsafe_ambiguities {
             if ambiguity.tail.is_empty() {
                 writeln!(

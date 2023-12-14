@@ -160,5 +160,5 @@ pub fn make_clean_list(
 
 pub fn log_base(base: u64, n: f64) -> f64 {
     let base_as_float: f64 = base as f64;
-    (n.ln() / base_as_float.ln()) as f64
+    n.ln() / base_as_float.ln()
 }
