@@ -1,6 +1,6 @@
 [package]
 name = "csafe"
-version = "0.3.17"
+version = "0.3.18"
 authors = ["sts10 <sschlinkert@gmail.com>"]
 edition = "2021"
 
@@ -9,7 +9,6 @@ fxhash = "0.2.1"
 clap = { version = "4.2.5", features = ["derive"] }
 
 [dev-dependencies]
-# criterion = "0.3"
 criterion = "0.4.0"
 
 [[bench]]
