@@ -1,7 +1,7 @@
 # CSafe: Compound Passphrase List Safety Checker
 
 ⚠️
-**WARNING**: This program does **not** make a list completely _uniquely decodable_, which I've since learned is the proper term I was searching for what I came up with the idea of "compound safety".
+**WARNING**: This program does **not** make a list completely _uniquely decodable_, which I've since learned is the proper term I was searching for when I came up with the idea of "compound safety".
 
 If you're looking for a tool to (actually) make a word list uniquely decodable, **see [Tidy](https://github.com/sts10/tidy)**. If you just want to _check_ if a given word list is uniquely decodable, I'd recommend [my Word List Auditor tool](https://github.com/sts10/wla).
 
